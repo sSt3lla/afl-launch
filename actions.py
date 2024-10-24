@@ -95,7 +95,7 @@ class Instance:
             self.afl_fuzzer_name = '-S secondary' + name + '-' + str(self.count)
 
 
-        afl_command = f"{env_joined}afl-fuzz {self.afl_fuzzer_name} -i {self.input} -o {self.output} -- {self.binary_path}"
+        afl_command = f"{env_joined}afl-fuzz {self.afl_fuzzer_name} -i {self.input} -o {self.output} -- {self.binary_path} -"
         if self.memory:
             afl_command += f" -m {self.memory}"
         if self.timeout is None:
