@@ -25,7 +25,7 @@ def main():
     config = Config(args)
     actions = Actions(config)
     print(actions.get_commands_and_names())
-    # run_commands(actions.get_commands_and_names())
+    run_commands(actions.get_commands_and_names())
 
 if __name__ == '__main__': 
     main()
