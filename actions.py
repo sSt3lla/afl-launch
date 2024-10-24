@@ -52,11 +52,12 @@ class Actions:
     def get_commands_and_names(self) -> dict[str, str]:
         commands = {}
         for instance in self.instances:
-            commands[instance.get_command()] = instance.afl_fuzzer_name
+            index = instance.get_command()
+            commands[index] = instance.fuzzer_name
         return commands
 
 class Instance:
-    def __init__(self, binary_path, nput, output, secondary_options: list[Option], count, name=None, memory=0, timeout="'+'", dict=None):
+    def __init__(self, binary_path, input, output, secondary_options: list[Option], count, name=None, memory=0, timeout="'+'", dict=None):
         self.binary_path = binary_path
         self.input = input
         self.output = output
@@ -88,14 +89,14 @@ class Instance:
         name = ''
         if self.name != 'None':
             name = '-' + self.name
-       
         if self.main:
-            self.afl_fuzzer_name = '-M main' + name
+            self.fuzzer_name = 'main' + name
+            fuzzer_command_name = '-M main' + name
         else:
-            self.afl_fuzzer_name = '-S secondary' + name + '-' + str(self.count)
+            self.fuzzer_name = 'secondary' + name + '-' + str(self.count)
+            fuzzer_command_name = '-S secondary' + name + '-' + str(self.count)
 
-
-        afl_command = f"{env_joined}afl-fuzz {self.afl_fuzzer_name} -i {self.input} -o {self.output} -- {self.binary_path} -"
+        afl_command = f"{env_joined}afl-fuzz {fuzzer_command_name} -i {self.input} -o {self.output}"
         if self.memory:
             afl_command += f" -m {self.memory}"
         if self.timeout is None:
@@ -104,4 +105,5 @@ class Instance:
             afl_command += f" -x {self.dict}"
 
         afl_command += ' ' + command_joined
+        afl_command += f"-- {self.binary_path} -"
         return afl_command
