@@ -1,0 +1,40 @@
+
+[compile_options]
+
+# Enable or disable sanitizers
+[compile_options.sanitizers]
+asan = true
+masn = true
+ubsan = true
+cfisan = true
+tasn = true
+lsan = true
+hardened = true
+
+# Enable or disable instrumentation
+[compile_options.instrumentation]
+#https://github.com/AFLplusplus/AFLplusplus/blob/stable/instrumentation/README.laf-intel.md
+laf = true
+
+#https://github.com/AFLplusplus/AFLplusplus/blob/stable/instrumentation/README.cmplog.md
+cmplog = true 
+cmplog_opts = ["", "2AT", "3ATX"]
+
+[secondary_options]
+MOpt_mutator = 0.1
+old_queue_cycle = 0.1
+disable_trimming = 0.6
+
+explore_strategy = 0.4
+exploit_strategy = 0.2
+
+ascii_type = 0.3
+binary_type = 0.3
+
+[power_schedule]
+explore = 1
+coe = 1
+lin = 1
+quad = 1
+exploit = 1
+rare = 1
