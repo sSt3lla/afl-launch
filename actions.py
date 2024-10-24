@@ -35,7 +35,8 @@ class Actions:
             if self.config.no_master:
                 i += 1
         
-            new_instance = Instance(self.config.input, 
+            new_instance = Instance(self.config.binary_path,
+                                    self.config.input, 
                                     self.config.output, 
                                     secondary_options,
                                     i,
@@ -55,7 +56,8 @@ class Actions:
         return commands
 
 class Instance:
-    def __init__(self, input, output, secondary_options: list[Option], count, name=None, memory=0, timeout="'+'", dict=None):
+    def __init__(self, binary_path, nput, output, secondary_options: list[Option], count, name=None, memory=0, timeout="'+'", dict=None):
+        self.binary_path = binary_path
         self.input = input
         self.output = output
         self.secondary_options = secondary_options
@@ -93,7 +95,7 @@ class Instance:
             self.afl_fuzzer_name = '-S secondary' + name + '-' + str(self.count)
 
 
-        afl_command = f"{env_joined}afl-fuzz {afl_fuzzer_name} -i {self.input} -o {self.output}"
+        afl_command = f"{env_joined}afl-fuzz {self.afl_fuzzer_name} -i {self.input} -o {self.output} -- {self.binary_path}"
         if self.memory:
             afl_command += f" -m {self.memory}"
         if self.timeout is None:

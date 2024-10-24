@@ -8,6 +8,7 @@ from tmux import run_commands
 def main():
     parser = argparse.ArgumentParser(description='afl-big fuzzing tool options')
 
+    parser.add_argument('binary_path', type=pathlib.Path, help='Path to the binary to fuzz')
     parser.add_argument('-i', type=pathlib.Path, required=True, help='afl-fuzz -i option (input location)')
     parser.add_argument('-m', type=int, default=0, help='afl-fuzz -m option (memory limit), 0 for no limit (defaults to 0)')
     parser.add_argument('-n', type=int, default=0, help='Number of instances to launch, 0 for automatic (defaults to 0)')

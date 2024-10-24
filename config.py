@@ -6,6 +6,7 @@ import os
 
 class Config:
     def __init__(self, args: Namespace):
+        self.binary_path = str(args.binary_path)
         self.input = str(args.i)
         self.memory = int(args.m)
 
