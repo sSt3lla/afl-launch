@@ -24,8 +24,7 @@ def main():
     args = parser.parse_args()
     config = Config(args)
     actions = Actions(config)
-    print(actions.get_commands_and_names())
-    run_commands(actions.get_commands_and_names())
+    run_commands(actions.get_names_and_commands())
 
 if __name__ == '__main__': 
     main()

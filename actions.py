@@ -49,11 +49,10 @@ class Actions:
 
         return instances
     
-    def get_commands_and_names(self) -> dict[str, str]:
+    def get_names_and_commands(self) -> dict[str, str]:
         commands = {}
         for instance in self.instances:
-            index = instance.get_command()
-            commands[index] = instance.fuzzer_name
+            commands[instance.fuzzer_name] = instance.get_command()
         return commands
 
 class Instance:
