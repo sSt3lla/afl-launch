@@ -6,18 +6,18 @@ import os
 
 class Config:
     def __init__(self, args: Namespace):
-        self.input = args.i
-        self.memory = args.m
+        self.input = str(args.i)
+        self.memory = int(args.m)
 
-        self.instances = args.n
+        self.instances = int(args.n)
         if self.instances == 0:
             self.instances = len(os.sched_getaffinity(0))
 
-        self.name = args.name
-        self.no_master = args.no_master
-        self.output = args.o
-        self.timeout: int | str = args.t
-        if self.timeout == 0:
+        self.name = str(args.name)
+        self.no_master = bool(args.no_master)
+        self.output = str(args.o)
+        self.timeout = str(args.t)
+        if self.timeout == '0':
             self.timeout = '+'
 
         self.dict = args.x
@@ -38,7 +38,6 @@ class Config:
 
 
     def setup_secondary_options(self):
-
         secondary_options: list[list[Option]] = []
         option_table : dict[str, Option] = {
             'MOpt_mutator': MOptMutator(),

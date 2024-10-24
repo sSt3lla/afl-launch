@@ -39,6 +39,7 @@ class Actions:
                                     self.config.output, 
                                     secondary_options,
                                     i,
+                                    self.config.name,
                                     self.config.memory,
                                     self.config.timeout,
                                     self.config.dict)
@@ -46,10 +47,15 @@ class Actions:
             instances.append(new_instance)
 
         return instances
+    
+    def get_commands_and_names(self) -> dict[str, str]:
+        commands = {}
+        for instance in self.instances:
+            commands[instance.get_command()] = instance.afl_fuzzer_name
+        return commands
 
 class Instance:
-    start_command = "afl-fuzz {} -i {} -o {}"
-    def __init__(self, input, output, secondary_options: list[Option], count, name=None, memory='0', timeout="'+'", dict=None):
+    def __init__(self, input, output, secondary_options: list[Option], count, name=None, memory=0, timeout="'+'", dict=None):
         self.input = input
         self.output = output
         self.secondary_options = secondary_options
@@ -58,9 +64,9 @@ class Instance:
             self.main = True
         else:
             self.main = False
-        self.name = name
+        self.name = str(name)
         self.memory = memory
-        self.timeout = timeout
+        self.timeout = str(timeout)
         self.dict = dict
     
     def get_command(self) -> str:
@@ -75,19 +81,22 @@ class Instance:
         
         env_joined = ' '.join(env) + ' ' if env else ''
         command_joined = ' '.join(command) + ' ' if command else ''
-        name = self.name + '-' if self.name else ''
-       
 
+
+        name = ''
+        if self.name != 'None':
+            name = '-' + self.name
+       
         if self.main:
-            afl_fuzzer_name = '-M main' + name
+            self.afl_fuzzer_name = '-M main' + name
         else:
-            afl_fuzzer_name = '-S secondary' + name + '-' + str(self.count)
+            self.afl_fuzzer_name = '-S secondary' + name + '-' + str(self.count)
 
 
         afl_command = f"{env_joined}afl-fuzz {afl_fuzzer_name} -i {self.input} -o {self.output}"
         if self.memory:
             afl_command += f" -m {self.memory}"
-        if self.timeout:
+        if self.timeout is None:
             afl_command += f" -t {self.timeout}"
         if self.dict:
             afl_command += f" -x {self.dict}"

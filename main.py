@@ -3,6 +3,7 @@ import pathlib
 from config import Config
 from actions import Actions
 from random import seed
+from tmux import run_commands
 
 def main():
     parser = argparse.ArgumentParser(description='afl-big fuzzing tool options')
@@ -22,10 +23,7 @@ def main():
     args = parser.parse_args()
     config = Config(args)
     actions = Actions(config)
-
-
-    for instance in actions.instances:
-        print(instance.get_command())
+    run_commands(actions.get_commands_and_names())
 
 if __name__ == '__main__': 
     main()
